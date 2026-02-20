@@ -1,0 +1,2006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Reel Lab — The Formula for Digital Growth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #080808;
+    --deep: #0f0f0f;
+    --charcoal: #1a1a1a;
+    --card: #141414;
+    --gold: #d4af37;
+    --gold-light: #e8cc6a;
+    --gold-dim: rgba(212,175,55,0.15);
+    --gold-glow: rgba(212,175,55,0.08);
+    --white: #f5f5f5;
+    --muted: #888;
+    --border: rgba(212,175,55,0.2);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--deep);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-trail {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0.5;
+  }
+  a, button { cursor: none; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 28px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: all 0.5s ease;
+  }
+  nav.scrolled {
+    background: rgba(8,8,8,0.92);
+    backdrop-filter: blur(20px);
+    padding: 18px 60px;
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  .nav-logo span { color: var(--white); }
+  .nav-links { display: flex; gap: 44px; list-style: none; }
+  .nav-links a {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    padding: 12px 28px;
+    text-decoration: none;
+    transition: all 0.3s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  /* HERO */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex; align-items: center;
+    overflow: hidden;
+    background: var(--black);
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 70% 50%, rgba(212,175,55,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(212,175,55,0.04) 0%, transparent 50%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image: 
+      linear-gradient(rgba(212,175,55,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,175,55,0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 100%);
+  }
+  .hero-video-placeholder {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #080808 0%, #111 50%, #0a0a0a 100%);
+    overflow: hidden;
+  }
+  .hero-video-placeholder::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: 
+      conic-gradient(from 180deg at 60% 50%, transparent 0deg, rgba(212,175,55,0.03) 60deg, transparent 120deg),
+      conic-gradient(from 0deg at 40% 50%, transparent 0deg, rgba(212,175,55,0.02) 60deg, transparent 120deg);
+    animation: rotateBg 20s linear infinite;
+  }
+  @keyframes rotateBg { to { transform: rotate(360deg); } }
+  .hero-film-strip {
+    position: absolute; right: -20px; top: 0; bottom: 0;
+    width: 420px;
+    display: flex; flex-direction: column;
+    gap: 3px;
+    opacity: 0.12;
+    transform: skewX(-2deg);
+  }
+  .film-frame {
+    flex: 1;
+    background: var(--charcoal);
+    border: 1px solid rgba(212,175,55,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+  .film-frame::before, .film-frame::after {
+    content: ''; position: absolute; top: 50%; transform: translateY(-50%);
+    width: 12px; height: 18px;
+    background: var(--black);
+    border: 1px solid rgba(212,175,55,0.15);
+  }
+  .film-frame::before { left: 6px; }
+  .film-frame::after { right: 6px; }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 60px;
+    max-width: 900px;
+  }
+  .hero-eyebrow {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.3s forwards;
+  }
+  .hero-eyebrow-line { width: 40px; height: 1px; background: var(--gold); }
+  .hero-eyebrow-text {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .hero-h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.5s forwards;
+  }
+  .hero-h1 em {
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold);
+    font-weight: 300;
+    font-size: 1.1em;
+  }
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 480px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.7s forwards;
+  }
+  .hero-ctas {
+    display: flex; gap: 20px; align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.9s forwards;
+  }
+  .btn-primary {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--gold);
+    padding: 18px 42px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gold-light);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-secondary {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+    transition: color 0.3s;
+  }
+  .btn-secondary:hover { color: var(--white); }
+  .btn-secondary-icon {
+    width: 40px; height: 40px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+  .btn-secondary:hover .btn-secondary-icon {
+    border-color: var(--gold);
+    background: var(--gold-glow);
+  }
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 60px;
+    display: flex; align-items: center; gap: 14px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.3s forwards;
+  }
+  .hero-scroll-line {
+    width: 1px; height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--gold));
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50% { opacity: 1; }
+  }
+  .hero-scroll-text {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    writing-mode: vertical-rl;
+  }
+  .hero-stats {
+    position: absolute; right: 60px; bottom: 40px;
+    display: flex; gap: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.1s forwards;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    color: var(--gold);
+    display: block;
+    font-weight: 600;
+  }
+  .stat-label { font-size: 11px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* TICKER */
+  .ticker-wrap {
+    background: var(--gold);
+    padding: 14px 0;
+    overflow: hidden;
+  }
+  .ticker {
+    display: flex;
+    gap: 0;
+    white-space: nowrap;
+    animation: ticker 25s linear infinite;
+  }
+  .ticker-item {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--black);
+    padding: 0 40px;
+  }
+  .ticker-sep { color: rgba(0,0,0,0.4); }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* SECTIONS */
+  section { padding: 120px 60px; }
+  .section-eyebrow {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 20px;
+  }
+  .section-eyebrow-line { width: 30px; height: 1px; background: var(--gold); }
+  .section-eyebrow-text {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2rem, 4vw, 3.8rem);
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+  }
+  .section-title em {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 300;
+    font-size: 1.15em;
+  }
+
+  /* ABOUT */
+  #about { background: var(--black); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .about-visual {
+    position: relative;
+    height: 600px;
+  }
+  .about-frame-main {
+    position: absolute;
+    inset: 0;
+    background: var(--charcoal);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .about-frame-main::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 60%, rgba(212,175,55,0.08));
+  }
+  .about-frame-inner {
+    position: absolute;
+    inset: 24px;
+    border: 1px solid rgba(212,175,55,0.1);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .about-cinematic-lines {
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(212,175,55,0.02) 3px,
+      rgba(212,175,55,0.02) 4px
+    );
+  }
+  .about-logo-giant {
+    font-family: 'Cinzel', serif;
+    font-size: 80px;
+    font-weight: 900;
+    color: rgba(212,175,55,0.08);
+    text-align: center;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    user-select: none;
+  }
+  .about-badge {
+    position: absolute;
+    bottom: -20px; right: -20px;
+    width: 120px; height: 120px;
+    background: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+  .about-badge-text {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--black);
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .about-content p {
+    font-size: 16px;
+    color: rgba(245,245,245,0.7);
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+  .about-content p strong { color: var(--gold); font-weight: 500; }
+  .about-features {
+    margin-top: 40px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .about-feature {
+    display: flex; align-items: center; gap: 16px;
+    padding: 16px 20px;
+    background: var(--charcoal);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    transition: all 0.3s;
+  }
+  .about-feature:hover { background: rgba(212,175,55,0.05); transform: translateX(4px); }
+  .about-feature-text { font-size: 14px; color: var(--white); }
+
+  /* WHY THE LAB */
+  #why { background: var(--deep); position: relative; overflow: hidden; }
+  .why-bg {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(212,175,55,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .why-grid {
+    max-width: 1200px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .why-content .section-title { font-size: clamp(1.8rem, 3.5vw, 3.2rem); }
+  .why-content p {
+    font-size: 16px;
+    color: rgba(245,245,245,0.65);
+    line-height: 1.9;
+    margin-bottom: 20px;
+  }
+  .formula-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .formula-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .formula-title {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .formula-items { display: flex; flex-direction: column; gap: 16px; }
+  .formula-item {
+    display: flex; align-items: center; gap: 20px;
+    padding: 16px;
+    background: rgba(212,175,55,0.03);
+    border: 1px solid rgba(212,175,55,0.08);
+    transition: all 0.3s;
+  }
+  .formula-item:hover { border-color: var(--border); background: rgba(212,175,55,0.06); }
+  .formula-num {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    color: var(--gold);
+    font-weight: 700;
+    min-width: 40px;
+    opacity: 0.4;
+  }
+  .formula-item-text { font-size: 14px; color: var(--white); line-height: 1.5; }
+  .formula-item-label { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* SERVICES */
+  #services { background: var(--black); }
+  .services-header { max-width: 600px; margin-bottom: 70px; }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .service-card {
+    background: var(--charcoal);
+    padding: 50px 40px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    border-bottom: 2px solid transparent;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent, rgba(212,175,55,0.04));
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .service-card:hover { background: #181818; border-bottom-color: var(--gold); }
+  .service-card:hover::before { opacity: 1; }
+  .service-num {
+    font-family: 'Cinzel', serif;
+    font-size: 48px;
+    color: rgba(212,175,55,0.08);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 32px;
+    display: block;
+    transition: color 0.4s;
+  }
+  .service-card:hover .service-num { color: rgba(212,175,55,0.15); }
+  .service-icon {
+    width: 50px; height: 50px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+    font-size: 20px;
+    transition: all 0.4s;
+  }
+  .service-card:hover .service-icon { background: var(--gold-dim); border-color: var(--gold); }
+  .service-title {
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    letter-spacing: 0.02em;
+  }
+  .service-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 28px;
+  }
+  .service-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .service-tag {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(212,175,55,0.25);
+    padding: 4px 12px;
+  }
+
+  /* PORTFOLIO */
+  #portfolio { background: var(--deep); }
+  .portfolio-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 50px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .portfolio-filters {
+    display: flex; gap: 4px;
+    margin-bottom: 50px;
+    max-width: 1200px;
+    margin: 0 auto 40px;
+  }
+  .filter-btn {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--muted);
+    cursor: none;
+    transition: all 0.3s;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--black);
+  }
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .portfolio-item {
+    position: relative;
+    aspect-ratio: 16/10;
+    background: var(--charcoal);
+    overflow: hidden;
+    cursor: none;
+  }
+  .portfolio-item-bg {
+    position: absolute; inset: 0;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .portfolio-item:hover .portfolio-item-bg { transform: scale(1.05); }
+  .portfolio-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 24px;
+  }
+  .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+  .portfolio-item-cat {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .portfolio-item-title {
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .portfolio-play {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    width: 56px; height: 56px;
+    background: rgba(212,175,55,0.9);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    transition: all 0.4s;
+  }
+  .portfolio-item:hover .portfolio-play { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+  /* COLORS for portfolio items */
+  .pi-1 { background: linear-gradient(135deg, #1a0a0a 0%, #2a1a0a 100%); }
+  .pi-2 { background: linear-gradient(135deg, #0a1a0a 0%, #0a2a1a 100%); }
+  .pi-3 { background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2a 100%); }
+  .pi-4 { background: linear-gradient(135deg, #1a1a0a 0%, #2a1a0a 100%); }
+  .pi-5 { background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 100%); }
+  .pi-6 { background: linear-gradient(135deg, #0a1a1a 0%, #0a0a2a 100%); }
+
+  /* TESTIMONIALS */
+  #testimonials { background: var(--black); overflow: hidden; }
+  .testimonials-track {
+    display: flex;
+    gap: 24px;
+    animation: slideLeft 30s linear infinite;
+    width: max-content;
+    margin-top: 60px;
+  }
+  .testimonials-track:hover { animation-play-state: paused; }
+  @keyframes slideLeft { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .testimonial-card {
+    width: 420px;
+    flex-shrink: 0;
+    background: var(--charcoal);
+    border: 1px solid var(--border);
+    padding: 40px;
+    position: relative;
+  }
+  .testimonial-card::before {
+    content: '"';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 100px;
+    color: rgba(212,175,55,0.12);
+    position: absolute;
+    top: 10px; right: 24px;
+    line-height: 1;
+  }
+  .testimonial-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: rgba(245,245,245,0.85);
+    line-height: 1.7;
+    margin-bottom: 28px;
+  }
+  .testimonial-author { display: flex; align-items: center; gap: 16px; }
+  .testimonial-avatar {
+    width: 48px; height: 48px;
+    background: var(--gold-dim);
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    color: var(--gold);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .testimonial-name {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .testimonial-business { font-size: 12px; color: var(--muted); letter-spacing: 0.05em; }
+  .testimonial-stars { color: var(--gold); font-size: 12px; margin-bottom: 4px; }
+
+  /* PRICING */
+  #pricing { background: var(--deep); }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1100px;
+    margin: 60px auto 0;
+  }
+  .pricing-card {
+    background: var(--charcoal);
+    padding: 50px 40px;
+    position: relative;
+    border-bottom: 2px solid transparent;
+    transition: all 0.4s;
+  }
+  .pricing-card.featured {
+    background: var(--card);
+    border-bottom-color: var(--gold);
+    transform: scaleY(1.02);
+    z-index: 1;
+  }
+  .pricing-card:not(.featured):hover { border-bottom-color: var(--gold); }
+  .pricing-badge {
+    position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+    background: var(--gold);
+    color: var(--black);
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    white-space: nowrap;
+  }
+  .pricing-tier {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .pricing-price {
+    font-family: 'Cinzel', serif;
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    line-height: 1;
+  }
+  .pricing-price span { font-size: 18px; font-weight: 400; color: var(--muted); }
+  .pricing-desc { font-size: 13px; color: var(--muted); margin-bottom: 32px; line-height: 1.6; }
+  .pricing-features { list-style: none; margin-bottom: 36px; }
+  .pricing-features li {
+    font-size: 14px;
+    color: rgba(245,245,245,0.7);
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .pricing-features li::before { content: '✦'; color: var(--gold); font-size: 8px; flex-shrink: 0; }
+  .pricing-cta {
+    display: block;
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 16px;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .pricing-card.featured .pricing-cta {
+    background: var(--gold);
+    color: var(--black);
+  }
+  .pricing-card:not(.featured) .pricing-cta {
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .pricing-card:not(.featured):hover .pricing-cta {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* FOUNDER */
+  #founder { background: var(--black); }
+  .founder-grid {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 100px;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .founder-portrait {
+    position: relative;
+    height: 520px;
+  }
+  .founder-frame {
+    position: absolute; inset: 0;
+    background: var(--charcoal);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .founder-frame-inner {
+    position: absolute; inset: 20px;
+    border: 1px solid rgba(212,175,55,0.1);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .founder-initials {
+    font-family: 'Cinzel', serif;
+    font-size: 90px;
+    font-weight: 900;
+    color: rgba(212,175,55,0.15);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .founder-frame-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: rgba(212,175,55,0.3);
+    text-transform: uppercase;
+  }
+  .founder-accent {
+    position: absolute; bottom: -15px; left: -15px;
+    width: 100px; height: 100px;
+    background: linear-gradient(135deg, var(--gold), transparent);
+    opacity: 0.15;
+  }
+  .founder-content blockquote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-style: italic;
+    color: rgba(245,245,245,0.9);
+    line-height: 1.7;
+    border-left: 3px solid var(--gold);
+    padding-left: 28px;
+    margin: 30px 0 36px;
+  }
+  .founder-name {
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .founder-title { font-size: 13px; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 28px; }
+  .founder-desc { font-size: 15px; color: rgba(245,245,245,0.65); line-height: 1.9; }
+  .founder-socials { display: flex; gap: 12px; margin-top: 30px; }
+  .social-link {
+    width: 42px; height: 42px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 14px;
+    transition: all 0.3s;
+  }
+  .social-link:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-glow); }
+
+  /* CONTACT */
+  #contact { background: var(--deep); position: relative; overflow: hidden; }
+  .contact-bg {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 400px;
+    background: linear-gradient(180deg, rgba(212,175,55,0.04) 0%, transparent 100%);
+    pointer-events: none;
+  }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .contact-info .section-title { font-size: clamp(2rem, 3.5vw, 3rem); margin-bottom: 20px; }
+  .contact-info > p { font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 40px; }
+  .contact-detail {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 20px;
+  }
+  .contact-detail-icon {
+    width: 42px; height: 42px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .contact-detail-text { font-size: 14px; color: rgba(245,245,245,0.7); }
+  .contact-detail-label { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+  .contact-form-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 50px;
+    position: relative;
+  }
+  .contact-form-wrap::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { margin-bottom: 20px; }
+  .form-label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+    font-family: 'Cinzel', serif;
+  }
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 14px 18px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    transition: border-color 0.3s;
+    outline: none;
+    appearance: none;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--gold);
+    background: rgba(212,175,55,0.03);
+  }
+  .form-select option { background: var(--deep); color: var(--white); }
+  .form-textarea { min-height: 120px; resize: vertical; }
+  .form-submit {
+    width: 100%;
+    background: var(--gold);
+    color: var(--black);
+    border: none;
+    padding: 18px;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: none;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  .form-submit::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gold-light);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+  }
+  .form-submit:hover::before { transform: translateX(0); }
+  .form-submit span { position: relative; z-index: 1; }
+  .form-success {
+    display: none;
+    text-align: center;
+    padding: 24px;
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    border: 1px solid var(--gold);
+    margin-top: 16px;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    border-top: 1px solid var(--border);
+    padding: 80px 60px 40px;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+  .footer-brand-logo {
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .footer-brand-logo span { color: var(--white); }
+  .footer-brand-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+  .footer-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .footer-links a::before { content: '›'; color: var(--gold); }
+  .footer-links a:hover { color: var(--white); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-copy { font-size: 12px; color: rgba(136,136,136,0.5); letter-spacing: 0.05em; }
+  .footer-socials { display: flex; gap: 10px; }
+  .footer-social {
+    width: 34px; height: 34px;
+    border: 1px solid rgba(212,175,55,0.15);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 13px;
+    transition: all 0.3s;
+  }
+  .footer-social:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* SCROLL ANIMATIONS */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-delay-5 { transition-delay: 0.5s; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.95);
+    backdrop-filter: blur(10px);
+    z-index: 2000;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+  }
+  .modal-overlay.active { opacity: 1; pointer-events: all; }
+  .modal-content {
+    width: 90%;
+    max-width: 800px;
+    background: var(--charcoal);
+    border: 1px solid var(--border);
+    padding: 48px;
+    transform: scale(0.95);
+    transition: transform 0.4s;
+    position: relative;
+  }
+  .modal-overlay.active .modal-content { transform: scale(1); }
+  .modal-close {
+    position: absolute; top: 20px; right: 20px;
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 18px;
+    cursor: none;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+  .modal-close:hover { border-color: var(--gold); color: var(--gold); }
+  .modal-video-placeholder {
+    width: 100%; aspect-ratio: 16/9;
+    background: var(--black);
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(212,175,55,0.1);
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .modal-video-icon {
+    width: 70px; height: 70px;
+    background: rgba(212,175,55,0.15);
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    color: var(--gold);
+  }
+  .modal-title {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .modal-meta { font-size: 13px; color: var(--muted); }
+
+  /* DIVIDER */
+  .gold-divider {
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    margin: 24px 0;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    nav { padding: 24px 30px; }
+    nav.scrolled { padding: 16px 30px; }
+    .nav-links { display: none; }
+    section { padding: 80px 30px; }
+    .hero-content { padding: 0 30px; }
+    .hero-stats { right: 30px; gap: 28px; }
+    .about-grid, .why-grid, .founder-grid, .contact-grid { grid-template-columns: 1fr; gap: 60px; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; gap: 2px; }
+    .pricing-card.featured { transform: none; }
+    .portfolio-grid { grid-template-columns: 1fr 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .about-visual { height: 350px; }
+    .founder-portrait { height: 300px; }
+    .founder-grid { grid-template-columns: 1fr; }
+    .contact-form-wrap { padding: 32px; }
+  }
+  @media (max-width: 640px) {
+    .hero-h1 { font-size: 2.5rem; }
+    .hero-stats { display: none; }
+    .hero-ctas { flex-direction: column; align-items: flex-start; }
+    .services-grid { grid-template-columns: 1fr; }
+    .portfolio-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { padding: 60px 20px 30px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">The Reel <span>Lab</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#founder">Founder</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta"><span>Book Strategy Call</span></a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-video-placeholder">
+    <div class="hero-film-strip">
+      <div class="film-frame"></div>
+      <div class="film-frame"></div>
+      <div class="film-frame"></div>
+      <div class="film-frame"></div>
+      <div class="film-frame"></div>
+      <div class="film-frame"></div>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <span class="hero-eyebrow-text">Premium Content Agency · Est. 2024</span>
+    </div>
+    <h1 class="hero-h1">
+      We Turn Local Brands Into<br>
+      <em>Digital Powerhouses</em>
+    </h1>
+    <p class="hero-sub">
+      Content isn't guesswork. It's a formula. We craft cinematic, scroll-stopping reels and strategies that convert viewers into customers.
+    </p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-primary"><span>Book Strategy Call</span></a>
+      <a href="#portfolio" class="btn-secondary">
+        <div class="btn-secondary-icon">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M1 6h10M7 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        View Our Work
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span class="hero-scroll-text">Scroll</span>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-num">200+</span>
+      <span class="stat-label">Reels Created</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">50+</span>
+      <span class="stat-label">Brands Scaled</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">10M+</span>
+      <span class="stat-label">Views Generated</span>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker" id="ticker">
+    <span class="ticker-item">Cinematic Reels <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Strategic Storytelling <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Talent Casting <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Social Media Management <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Brand Identity <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Digital Growth <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Content Strategy <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Trend-Driven Content <span class="ticker-sep">✦</span></span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item">Cinematic Reels <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Strategic Storytelling <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Talent Casting <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Social Media Management <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Brand Identity <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Digital Growth <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Content Strategy <span class="ticker-sep">✦</span></span>
+    <span class="ticker-item">Trend-Driven Content <span class="ticker-sep">✦</span></span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-frame-main">
+        <div class="about-cinematic-lines"></div>
+        <div class="about-frame-inner">
+          <div class="about-logo-giant">TRL</div>
+          <div style="font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.3em; color: rgba(212,175,55,0.2); text-transform: uppercase;">The Formula for Digital Growth</div>
+        </div>
+      </div>
+      <div class="about-badge">
+        <div class="about-badge-text">Premium<br>Agency<br>★★★★★</div>
+      </div>
+    </div>
+    <div class="about-content">
+      <div class="section-eyebrow reveal">
+        <div class="section-eyebrow-line"></div>
+        <span class="section-eyebrow-text">About The Reel Lab</span>
+      </div>
+      <h2 class="section-title reveal">The Formula for <em>Digital Growth</em></h2>
+      <div class="gold-divider reveal"></div>
+      <p class="reveal">At The Reel Lab, we believe that every premium brand deserves to be seen. In today's fast-moving digital world, a static photo isn't enough to capture attention — you need <strong>high-energy, high-quality video content</strong> that stops the scroll and brings customers through your doors.</p>
+      <p class="reveal reveal-delay-1">Founded by Pritam Sahoo, The Reel Lab was built to bridge the gap between local excellence and global-standard content. We specialize in working with businesses in the <strong>₹1 Cr – ₹5 Cr revenue bracket</strong>, helping them transition from traditional shops to digital powerhouses.</p>
+      <div class="about-features">
+        <div class="about-feature reveal reveal-delay-2">
+          <span style="color: var(--gold); font-size: 18px;">🎬</span>
+          <span class="about-feature-text">Cinematic production with Hollywood-grade storytelling</span>
+        </div>
+        <div class="about-feature reveal reveal-delay-3">
+          <span style="color: var(--gold); font-size: 18px;">📊</span>
+          <span class="about-feature-text">Data-driven strategy backed by trend analysis</span>
+        </div>
+        <div class="about-feature reveal reveal-delay-4">
+          <span style="color: var(--gold); font-size: 18px;">🎯</span>
+          <span class="about-feature-text">Results-oriented approach — content that converts</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY THE LAB -->
+<section id="why">
+  <div class="why-bg"></div>
+  <div class="why-grid">
+    <div class="why-content">
+      <div class="section-eyebrow reveal">
+        <div class="section-eyebrow-line"></div>
+        <span class="section-eyebrow-text">Why The Lab</span>
+      </div>
+      <h2 class="section-title reveal">Content Creation Is a <em>Science</em></h2>
+      <div class="gold-divider reveal"></div>
+      <p class="reveal">Content creation isn't a guessing game — it's a science. We experiment with trending audios, cinematic transitions, and strategic storytelling to find the perfect formula for your brand.</p>
+      <p class="reveal reveal-delay-1">Every frame is intentional. Every cut is calculated. Every story is crafted to move your audience from passive viewers to paying customers. That's the Reel Lab difference.</p>
+    </div>
+    <div class="formula-card reveal">
+      <div class="formula-title">The Reel Lab Formula™</div>
+      <div class="formula-items">
+        <div class="formula-item">
+          <span class="formula-num">01</span>
+          <div>
+            <div class="formula-item-text">Discovery & Brand Analysis</div>
+            <div class="formula-item-label">Understand your brand DNA</div>
+          </div>
+        </div>
+        <div class="formula-item">
+          <span class="formula-num">02</span>
+          <div>
+            <div class="formula-item-text">Trend Research & Strategy</div>
+            <div class="formula-item-label">What's working in your niche</div>
+          </div>
+        </div>
+        <div class="formula-item">
+          <span class="formula-num">03</span>
+          <div>
+            <div class="formula-item-text">Cinematic Production</div>
+            <div class="formula-item-label">Film, direct, and edit at scale</div>
+          </div>
+        </div>
+        <div class="formula-item">
+          <span class="formula-num">04</span>
+          <div>
+            <div class="formula-item-text">Publish & Optimize</div>
+            <div class="formula-item-label">Time, caption, hashtag science</div>
+          </div>
+        </div>
+        <div class="formula-item">
+          <span class="formula-num">05</span>
+          <div>
+            <div class="formula-item-text">Track & Iterate</div>
+            <div class="formula-item-label">Monthly performance reviews</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-header">
+    <div class="section-eyebrow reveal">
+      <div class="section-eyebrow-line"></div>
+      <span class="section-eyebrow-text">What We Do</span>
+    </div>
+    <h2 class="section-title reveal">Our <em>Services</em></h2>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <span class="service-num">01</span>
+      <div class="service-icon">🎬</div>
+      <div class="service-title">Professional Video Production</div>
+      <div class="service-desc">Cinematic-grade reels shot and edited by our in-house team. From concept to final cut — every frame tells your brand story.</div>
+      <div class="service-tags">
+        <span class="service-tag">Reels</span>
+        <span class="service-tag">Short-Form</span>
+        <span class="service-tag">Long-Form</span>
+      </div>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <span class="service-num">02</span>
+      <div class="service-icon">🎭</div>
+      <div class="service-title">Talent Casting</div>
+      <div class="service-desc">Access our curated network of on-camera talent, models, and influencers that match your brand's aesthetic and audience.</div>
+      <div class="service-tags">
+        <span class="service-tag">Influencers</span>
+        <span class="service-tag">Models</span>
+        <span class="service-tag">UGC</span>
+      </div>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <span class="service-num">03</span>
+      <div class="service-icon">📈</div>
+      <div class="service-title">Strategy & Management</div>
+      <div class="service-desc">Full-service social media management. Content calendar, posting schedule, community management, and monthly reporting.</div>
+      <div class="service-tags">
+        <span class="service-tag">Instagram</span>
+        <span class="service-tag">YouTube</span>
+        <span class="service-tag">LinkedIn</span>
+      </div>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <span class="service-num">04</span>
+      <div class="service-icon">✍️</div>
+      <div class="service-title">Script & Storytelling</div>
+      <div class="service-desc">Every great video starts with a great script. Our storytelling team crafts narratives that emotionally connect with your target audience.</div>
+      <div class="service-tags">
+        <span class="service-tag">Copywriting</span>
+        <span class="service-tag">Scripts</span>
+        <span class="service-tag">Hooks</span>
+      </div>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <span class="service-num">05</span>
+      <div class="service-icon">🎨</div>
+      <div class="service-title">Brand Identity Design</div>
+      <div class="service-desc">Visual identity, logo motion graphics, brand presets and color grades that make your content unmistakably yours.</div>
+      <div class="service-tags">
+        <span class="service-tag">Logo</span>
+        <span class="service-tag">Motion</span>
+        <span class="service-tag">Branding</span>
+      </div>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <span class="service-num">06</span>
+      <div class="service-icon">💡</div>
+      <div class="service-title">Growth Consulting</div>
+      <div class="service-desc">1-on-1 strategy sessions to analyze your current digital presence, competitors, and roadmap your 90-day growth plan.</div>
+      <div class="service-tags">
+        <span class="service-tag">Audit</span>
+        <span class="service-tag">Roadmap</span>
+        <span class="service-tag">Growth</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="portfolio-header reveal">
+    <div>
+      <div class="section-eyebrow">
+        <div class="section-eyebrow-line"></div>
+        <span class="section-eyebrow-text">Portfolio</span>
+      </div>
+      <h2 class="section-title">Our <em>Work</em></h2>
+    </div>
+    <a href="#contact" class="btn-primary"><span>Start Your Project</span></a>
+  </div>
+  <div class="portfolio-filters reveal">
+    <button class="filter-btn active" onclick="filterPortfolio(this,'all')">All</button>
+    <button class="filter-btn" onclick="filterPortfolio(this,'restaurant')">Restaurant</button>
+    <button class="filter-btn" onclick="filterPortfolio(this,'retail')">Retail</button>
+    <button class="filter-btn" onclick="filterPortfolio(this,'lifestyle')">Lifestyle</button>
+  </div>
+  <div class="portfolio-grid" id="portfolioGrid">
+    <div class="portfolio-item reveal" data-cat="restaurant" onclick="openModal('Cloud Nine Restaurant','Restaurant & F&B','Drove 40% increase in footfall through cinematic dining content')">
+      <div class="portfolio-item-bg pi-1"></div>
+      <div class="portfolio-play">▶</div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-item-cat">Restaurant · Instagram</div>
+        <div class="portfolio-item-title">Cloud Nine Restaurant</div>
+      </div>
+    </div>
+    <div class="portfolio-item reveal reveal-delay-1" data-cat="retail" onclick="openModal('StyleHouse Fashion','Retail Fashion','700K+ views on launch reel, 3x sales growth in 30 days')">
+      <div class="portfolio-item-bg pi-2"></div>
+      <div class="portfolio-play">▶</div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-item-cat">Fashion Retail · Reels</div>
+        <div class="portfolio-item-title">StyleHouse Fashion</div>
+      </div>
+    </div>
+    <div class="portfolio-item reveal reveal-delay-2" data-cat="lifestyle" onclick="openModal('Aura Wellness','Lifestyle & Wellness','Built 50K organic following in 90 days')">
+      <div class="portfolio-item-bg pi-3"></div>
+      <div class="portfolio-play">▶</div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-item-cat">Lifestyle · YouTube Shorts</div>
+        <div class="portfolio-item-title">Aura Wellness Spa</div>
+      </div>
+    </div>
+    <div class="portfolio-item reveal reveal-delay-1" data-cat="restaurant" onclick="openModal('Spice Garden','Restaurant & F&B','1.2M views on viral reel series')">
+      <div class="portfolio-item-bg pi-4"></div>
+      <div class="portfolio-play">▶</div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-item-cat">Restaurant · Viral Content</div>
+        <div class="portfolio-item-title">Spice Garden</div>
+      </div>
+    </div>
+    <div class="portfolio-item reveal reveal-delay-2" data-cat="retail" onclick="openModal('Heritage Jewels','Luxury Retail','Elevated brand to premium tier with cinematic jewelry shoots')">
+      <div class="portfolio-item-bg pi-5"></div>
+      <div class="portfolio-play">▶</div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-item-cat">Luxury Retail · Brand Film</div>
+        <div class="portfolio-item-title">Heritage Jewels</div>
+      </div>
+    </div>
+    <div class="portfolio-item reveal reveal-delay-3" data-cat="lifestyle" onclick="openModal('FitLife Studio','Fitness Lifestyle','Scaled from 2K to 80K followers in 6 months')">
+      <div class="portfolio-item-bg pi-6"></div>
+      <div class="portfolio-play">▶</div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-item-cat">Fitness · Social Growth</div>
+        <div class="portfolio-item-title">FitLife Studio</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" style="padding-bottom: 120px; padding-left: 0; padding-right: 0;">
+  <div style="padding: 0 60px; margin-bottom: 10px;">
+    <div class="section-eyebrow reveal">
+      <div class="section-eyebrow-line"></div>
+      <span class="section-eyebrow-text">Client Stories</span>
+    </div>
+    <h2 class="section-title reveal">What Our <em>Clients Say</em></h2>
+  </div>
+  <div style="overflow: hidden;">
+    <div class="testimonials-track">
+      <!-- Track 1 -->
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"The Reel Lab completely transformed our restaurant's online presence. Our footfall went up by 40% in the first month and people literally walk in saying they found us on Instagram."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">R</div>
+          <div>
+            <div class="testimonial-name">Rahul Mehta</div>
+            <div class="testimonial-business">Cloud Nine Restaurant, Kolkata</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"Within 30 days of working with Pritam's team, our launch reel got 700K views and our store was packed. Best investment we made for our brand."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">P</div>
+          <div>
+            <div class="testimonial-name">Priya Sharma</div>
+            <div class="testimonial-business">StyleHouse Fashion, Mumbai</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"We went from 2K to 80K followers in 6 months. The content quality is exceptional — it genuinely looks like big-budget production but priced for businesses like ours."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">A</div>
+          <div>
+            <div class="testimonial-name">Anuj Verma</div>
+            <div class="testimonial-business">FitLife Studio, Bangalore</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"The team at The Reel Lab understood our jewelry brand's aesthetics immediately. Our content now looks better than most national brands and our DMs are full of inquiries."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">S</div>
+          <div>
+            <div class="testimonial-name">Sonal Khanna</div>
+            <div class="testimonial-business">Heritage Jewels, Delhi</div>
+          </div>
+        </div>
+      </div>
+      <!-- duplicates for loop -->
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"The Reel Lab completely transformed our restaurant's online presence. Our footfall went up by 40% in the first month and people literally walk in saying they found us on Instagram."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">R</div>
+          <div>
+            <div class="testimonial-name">Rahul Mehta</div>
+            <div class="testimonial-business">Cloud Nine Restaurant, Kolkata</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"Within 30 days of working with Pritam's team, our launch reel got 700K views and our store was packed. Best investment we made for our brand."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">P</div>
+          <div>
+            <div class="testimonial-name">Priya Sharma</div>
+            <div class="testimonial-business">StyleHouse Fashion, Mumbai</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"We went from 2K to 80K followers in 6 months. The content quality is exceptional — it genuinely looks like big-budget production but priced for businesses like ours."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">A</div>
+          <div>
+            <div class="testimonial-name">Anuj Verma</div>
+            <div class="testimonial-business">FitLife Studio, Bangalore</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"The team at The Reel Lab understood our jewelry brand's aesthetics immediately. Our content now looks better than most national brands and our DMs are full of inquiries."</div>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">S</div>
+          <div>
+            <div class="testimonial-name">Sonal Khanna</div>
+            <div class="testimonial-business">Heritage Jewels, Delhi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div style="text-align: center; max-width: 560px; margin: 0 auto 10px;">
+    <div class="section-eyebrow reveal" style="justify-content: center;">
+      <div class="section-eyebrow-line"></div>
+      <span class="section-eyebrow-text">Investment</span>
+      <div class="section-eyebrow-line"></div>
+    </div>
+    <h2 class="section-title reveal" style="text-align: center;">Transparent <em>Pricing</em></h2>
+    <p class="reveal" style="color: var(--muted); font-size: 15px; line-height: 1.7; margin-top: 16px;">No hidden fees. No surprises. Just premium content that delivers results.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card reveal">
+      <div class="pricing-tier">Starter</div>
+      <div class="pricing-price">₹15,000<span>/mo</span></div>
+      <div class="pricing-desc">Perfect for businesses just entering the digital space and wanting consistent, quality content.</div>
+      <ul class="pricing-features">
+        <li>8 Short-Form Reels / Month</li>
+        <li>Script & Concept Development</li>
+        <li>Basic Trend Research</li>
+        <li>Instagram & Facebook Management</li>
+        <li>Monthly Performance Report</li>
+      </ul>
+      <a href="#contact" class="pricing-cta">Get Started</a>
+    </div>
+    <div class="pricing-card featured reveal reveal-delay-1">
+      <div class="pricing-badge">Most Popular</div>
+      <div class="pricing-tier">Growth</div>
+      <div class="pricing-price">₹30,000<span>/mo</span></div>
+      <div class="pricing-desc">For brands serious about building a premium digital presence and growing their customer base.</div>
+      <ul class="pricing-features">
+        <li>16 Cinematic Reels / Month</li>
+        <li>Full Script & Story Development</li>
+        <li>Talent Casting (1 Shoot)</li>
+        <li>All Platform Management</li>
+        <li>Bi-Weekly Strategy Calls</li>
+        <li>Advanced Analytics Dashboard</li>
+      </ul>
+      <a href="#contact" class="pricing-cta">Get Started</a>
+    </div>
+    <div class="pricing-card reveal reveal-delay-2">
+      <div class="pricing-tier">Premium</div>
+      <div class="pricing-price">₹55,000<span>/mo</span></div>
+      <div class="pricing-desc">Full-service digital powerhouse transformation for ambitious brands ready to dominate their market.</div>
+      <ul class="pricing-features">
+        <li>25+ Reels + Brand Films / Month</li>
+        <li>Dedicated Creative Director</li>
+        <li>Unlimited Talent Casting</li>
+        <li>Full Social Media Management</li>
+        <li>Weekly Strategy Sessions</li>
+        <li>PR & Collaboration Outreach</li>
+        <li>Priority 24/7 Support</li>
+      </ul>
+      <a href="#contact" class="pricing-cta">Get Started</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section id="founder">
+  <div class="founder-grid">
+    <div class="founder-portrait reveal">
+      <div class="founder-frame">
+        <div class="founder-frame-inner">
+          <div class="founder-initials">PS</div>
+          <div class="founder-frame-label">Founder & Creative Director</div>
+        </div>
+      </div>
+      <div class="founder-accent"></div>
+    </div>
+    <div class="founder-content">
+      <div class="section-eyebrow reveal">
+        <div class="section-eyebrow-line"></div>
+        <span class="section-eyebrow-text">Meet The Visionary</span>
+      </div>
+      <h2 class="section-title reveal">Pritam <em>Sahoo</em></h2>
+      <blockquote class="reveal">"I started The Reel Lab because I saw too many amazing local businesses with great products but zero digital presence. My mission is to give these brands the premium look they deserve, making professional content production accessible and result-oriented."</blockquote>
+      <div class="founder-name reveal">Pritam Sahoo</div>
+      <div class="founder-title reveal">Founder & Creative Director, The Reel Lab</div>
+      <p class="founder-desc reveal">With a deep passion for visual storytelling and a background in digital strategy, Pritam built The Reel Lab from the ground up — one cinematic frame at a time. His vision is simple: every local business deserves a global-standard presence.</p>
+      <div class="founder-socials reveal">
+        <a href="#" class="social-link" title="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#" class="social-link" title="LinkedIn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4c0-1.5 1-2 2-2s2 .5 2 2v4M12 10v7"/></svg>
+        </a>
+        <a href="#" class="social-link" title="YouTube">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="3"/><polygon points="10,9 10,15 15,12" fill="currentColor" stroke="none"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-bg"></div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="section-eyebrow reveal">
+        <div class="section-eyebrow-line"></div>
+        <span class="section-eyebrow-text">Let's Talk</span>
+      </div>
+      <h2 class="section-title reveal">Book Your <em>Strategy Call</em></h2>
+      <div class="gold-divider reveal"></div>
+      <p class="reveal">Ready to turn your brand into a digital powerhouse? Let's discover the formula for your growth. Book a free 30-minute strategy call with Pritam.</p>
+      <div class="contact-detail reveal reveal-delay-1">
+        <div class="contact-detail-icon">📧</div>
+        <div>
+          <div class="contact-detail-label">Email</div>
+          <div class="contact-detail-text">hello@thereellab.in</div>
+        </div>
+      </div>
+      <div class="contact-detail reveal reveal-delay-2">
+        <div class="contact-detail-icon">📱</div>
+        <div>
+          <div class="contact-detail-label">WhatsApp</div>
+          <div class="contact-detail-text">+91 98765 43210</div>
+        </div>
+      </div>
+      <div class="contact-detail reveal reveal-delay-3">
+        <div class="contact-detail-icon">📍</div>
+        <div>
+          <div class="contact-detail-label">Location</div>
+          <div class="contact-detail-text">Kolkata, India · Serving Nationwide</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="contact-form-wrap reveal">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input type="text" class="form-input" placeholder="Rahul Mehta" id="f-name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" class="form-input" placeholder="rahul@business.com" id="f-email">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Business Name</label>
+          <input type="text" class="form-input" placeholder="Your Business Name" id="f-business">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Annual Revenue Range</label>
+          <select class="form-select" id="f-revenue">
+            <option value="" disabled selected>Select Revenue Range</option>
+            <option>Below ₹50 Lakhs</option>
+            <option>₹50L – ₹1 Crore</option>
+            <option>₹1 Crore – ₹2.5 Crore</option>
+            <option>₹2.5 Crore – ₹5 Crore</option>
+            <option>Above ₹5 Crore</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tell Us About Your Business</label>
+          <textarea class="form-textarea" placeholder="Tell us about your business and what you'd like to achieve..." id="f-message"></textarea>
+        </div>
+        <button class="form-submit" onclick="submitForm()"><span>Submit Inquiry →</span></button>
+        <div class="form-success" id="formSuccess">
+          ✦ &nbsp;Thank you! We'll reach out within 24 hours.&nbsp; ✦
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <span class="footer-brand-logo">The Reel <span>Lab</span></span>
+      <div class="footer-brand-desc">The Formula for Digital Growth. We help businesses in the ₹1Cr – ₹5Cr bracket become digital powerhouses through cinematic content and strategy.</div>
+      <div class="footer-socials" style="margin-top: 0;">
+        <a href="#" class="footer-social">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#" class="footer-social">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M7 10v7M7 7v.01M12 17v-4c0-1.5 1-2 2-2s2 .5 2 2v4M12 10v7"/></svg>
+        </a>
+        <a href="#" class="footer-social">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="3"/><polygon points="10,9 10,15 15,12" fill="currentColor" stroke="none"/></svg>
+        </a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-heading">Company</div>
+      <ul class="footer-links">
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#why">Our Formula</a></li>
+        <li><a href="#founder">Meet Pritam</a></li>
+        <li><a href="#contact">Careers</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Services</div>
+      <ul class="footer-links">
+        <li><a href="#services">Video Production</a></li>
+        <li><a href="#services">Talent Casting</a></li>
+        <li><a href="#services">Strategy & Growth</a></li>
+        <li><a href="#services">Brand Identity</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Connect</div>
+      <ul class="footer-links">
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+        <li><a href="#contact">Book A Call</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2024 The Reel Lab. All rights reserved. · Founder: Pritam Sahoo</div>
+    <div style="font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.15em; color: rgba(212,175,55,0.4);">Content Isn't Guesswork. It's a Formula.™</div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-video-placeholder">
+      <div class="modal-video-icon">▶</div>
+    </div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-meta" id="modalMeta"></div>
+    <div style="margin-top: 16px; padding: 16px; background: rgba(212,175,55,0.05); border: 1px solid var(--border);">
+      <div style="font-size: 12px; color: var(--muted); letter-spacing: 0.05em;">Result</div>
+      <div style="font-size: 14px; color: var(--gold); margin-top: 4px;" id="modalResult"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// CURSOR
+const cursor = document.getElementById('cursor');
+const trail = document.getElementById('cursorTrail');
+let mouseX = 0, mouseY = 0;
+let trailX = 0, trailY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  cursor.style.left = mouseX - 5 + 'px';
+  cursor.style.top = mouseY - 5 + 'px';
+});
+
+function animateTrail() {
+  trailX += (mouseX - trailX) * 0.12;
+  trailY += (mouseY - trailY) * 0.12;
+  trail.style.left = trailX - 18 + 'px';
+  trail.style.top = trailY - 18 + 'px';
+  requestAnimationFrame(animateTrail);
+}
+animateTrail();
+
+document.querySelectorAll('a, button, .portfolio-item, .filter-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'scale(2.5)';
+    trail.style.transform = 'scale(1.4)';
+    trail.style.borderColor = 'var(--gold)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'scale(1)';
+    trail.style.transform = 'scale(1)';
+    trail.style.borderColor = 'var(--gold)';
+  });
+});
+
+// NAV SCROLL
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// SCROLL REVEAL
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+revealEls.forEach(el => observer.observe(el));
+
+// PORTFOLIO FILTER
+function filterPortfolio(btn, cat) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.portfolio-item').forEach(item => {
+    const show = cat === 'all' || item.dataset.cat === cat;
+    item.style.opacity = show ? '1' : '0.2';
+    item.style.pointerEvents = show ? 'all' : 'none';
+  });
+}
+
+// MODAL
+function openModal(title, cat, result) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalMeta').textContent = cat;
+  document.getElementById('modalResult').textContent = result;
+  document.getElementById('modal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modal')) closeModal();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// CONTACT FORM
+function submitForm() {
+  const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const business = document.getElementById('f-business').value.trim();
+  if (!name || !email || !business) {
+    alert('Please fill in your name, email, and business name.');
+    return;
+  }
+  // Simulate submission
+  const btn = document.querySelector('.form-submit');
+  btn.innerHTML = '<span>Sending...</span>';
+  setTimeout(() => {
+    btn.innerHTML = '<span>Sent! ✦</span>';
+    document.getElementById('formSuccess').style.display = 'block';
+    ['f-name','f-email','f-business','f-message'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('f-revenue').value = '';
+    setTimeout(() => {
+      btn.innerHTML = '<span>Submit Inquiry →</span>';
+    }, 3000);
+  }, 1200);
+}
+
+// PARALLAX HERO
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const hero = document.getElementById('hero');
+  if (scrolled < window.innerHeight) {
+    const heroContent = hero.querySelector('.hero-content');
+    if (heroContent) heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+  }
+});
+</script>
+</body>
+</html>
