@@ -1,10 +1,13 @@
 version: 0.2
- 
+
 phases:
+  install:
+    commands:
+      - echo "No install needed for HTML/JS"
   build:
     commands:
-      - echo "Building..."
- 
+      - echo "No build needed for HTML/JS"
+
 artifacts:
   files:
-    - '**/*'
+    - "**/*"
